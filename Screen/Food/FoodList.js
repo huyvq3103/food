@@ -1,8 +1,6 @@
 import {
-  Alert,
   FlatList,
   Image,
-  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -131,6 +129,11 @@ const FoodList = () => {
   ]);
 
   const [searchText, setSearchText] = useState('');
+  const filteredFoods = () => {
+    return foods.filter(eachFood =>
+      eachFood.name.toLowerCase().includes(searchText.toLowerCase()),
+    );
+  };
   return (
     <View style={{style: 1, backgroundColor: 'white'}}>
       <View>
@@ -147,6 +150,7 @@ const FoodList = () => {
             color={'black'}
             style={{top: 12, left: 10, position: 'absolute'}}
           />
+
           <TextInput
             onChangeText={text => {
               setSearchText(text);
@@ -205,23 +209,23 @@ const FoodList = () => {
           <View style={{height: 1, backgroundColor: colors.inactive}} />
         </View>
 
-        <FlatList
-          data={foods.filter(eachFood =>
-            eachFood.name.toLowerCase().includes(searchText.toLowerCase()),
-          )}
-          keyExtractor={eachFood => eachFood.name}
-          renderItem={({item}) => {
-            return (
-              <FoodItem
-                onPress={() => {
-                  alert(`You press item name:${item.name}`);
-                }}
-                food={item}
-                key={item.name}
-              />
-            );
-          }}
-        />
+        {
+          <FlatList
+            data={filteredFoods()}
+            keyExtractor={eachFood => eachFood.name}
+            renderItem={({item}) => {
+              return (
+                <FoodItem
+                  onPress={() => {
+                    alert(`You press item name:${item.name}`);
+                  }}
+                  food={item}
+                  key={item.name}
+                />
+              );
+            }}
+          />
+        }
       </View>
     </View>
   );
